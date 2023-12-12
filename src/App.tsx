@@ -1,6 +1,6 @@
 const App = () => {
   return (
-    <div>
+    <div className="text-center">
       <h1>Welcome to snapgram</h1>
     </div>
   )
