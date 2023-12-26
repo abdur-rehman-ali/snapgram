@@ -12,6 +12,7 @@ import {
 } from "@/components/ui/form"
 import { Input } from "@/components/ui/input"
 import { registerFomSchema } from "../../lib/validation"
+import { Link } from "react-router-dom"
 
 const Register = () => {
   const registerForm = useForm<z.infer<typeof registerFomSchema>>({
@@ -88,9 +89,14 @@ const Register = () => {
               </FormItem>
             )}
           />
-          <Button type="submit" className="shad-button_primary w-full">Register</Button>
+          <Button type="submit" className="shad-button_primary w-full rounded-xl">Register</Button>
         </form>
       </Form>
+
+      <p className="text-small-regular text-light-2 text-center mt-2">
+        Already have an account ? 
+        <Link to="/login" className="text-primary-600 ml-1">Login</Link>
+      </p>
     </div>
   )
 }
