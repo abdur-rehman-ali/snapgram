@@ -9,7 +9,7 @@ const AuthLayout = () => {
           (<Navigate to="/home" />) :
           (
             <section className='flex justify-between'>
-              <section className='border-solid border-2 w-full flex flex-col justify-center items-center py-10 lg:w-1/2'>
+              <section className='w-full flex flex-col justify-center items-center py-10 lg:w-1/2'>
                 <Outlet />
               </section>
               <img

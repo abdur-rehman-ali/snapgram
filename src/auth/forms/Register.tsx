@@ -11,12 +11,12 @@ import {
   FormMessage,
 } from "@/components/ui/form"
 import { Input } from "@/components/ui/input"
-import { registerFomSchema } from "../../lib/validation"
+import { registerFormSchema } from "../../lib/validation"
 import { Link } from "react-router-dom"
 
 const Register = () => {
-  const registerForm = useForm<z.infer<typeof registerFomSchema>>({
-    resolver: zodResolver(registerFomSchema),
+  const registerForm = useForm<z.infer<typeof registerFormSchema>>({
+    resolver: zodResolver(registerFormSchema),
     defaultValues: {
       name: "",
       username: "",
@@ -25,7 +25,7 @@ const Register = () => {
     },
   })
 
-  function onSubmit(values: z.infer<typeof registerFomSchema>) {
+  function onSubmit(values: z.infer<typeof registerFormSchema>) {
     console.log(values)
   }
   return (
@@ -94,7 +94,7 @@ const Register = () => {
       </Form>
 
       <p className="text-small-regular text-light-2 text-center mt-2">
-        Already have an account ? 
+        Already have an account ?
         <Link to="/login" className="text-primary-600 ml-1">Login</Link>
       </p>
     </div>
