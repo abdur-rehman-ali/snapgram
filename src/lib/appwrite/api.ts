@@ -1,6 +1,7 @@
 import { INewUser } from "@/interfaces";
 import { account, appwriteConfig, avatars, databases } from "./config";
 import { ID } from 'appwrite'
+import { toast } from 'react-toastify';
 
 
 export const createUserAccount = async (user: INewUser) => {
@@ -22,8 +23,8 @@ export const createUserAccount = async (user: INewUser) => {
       imageURL: avatarURL,
     });
     return newUser;
-  } catch (error) {
-    console.log(error);
+  } catch (error: any) {
+    toast.error(error.message);
     return error;
   }
 };
@@ -43,8 +44,8 @@ export const saveUserToDatabase = async (user: {
       user,
     )
     return newUser;
-  } catch (error) {
-    console.log(error);
+  } catch (error: any) {
+    toast.error(error.message);
     return error;
   }
 }
