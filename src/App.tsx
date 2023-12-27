@@ -4,6 +4,9 @@ import Login from './auth/forms/Login';
 import AuthLayout from './auth/AuthLayout';
 import RootLayout from './root/RootLayout';
 import { Home } from './root';
+import { ToastContainer } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
+
 
 const App = () => {
   return (
@@ -17,6 +20,18 @@ const App = () => {
           <Route index element={ <Home/>} />
         </Route>
       </Routes>
+      <ToastContainer
+        position="top-right"
+        autoClose={5000}
+        hideProgressBar={false}
+        newestOnTop={false}
+        closeOnClick
+        rtl={false}
+        pauseOnFocusLoss
+        draggable
+        pauseOnHover
+        theme="dark"
+      />
     </main>
   )
 }
