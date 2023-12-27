@@ -13,6 +13,7 @@ import {
 import { Input } from "@/components/ui/input"
 import { registerFormSchema } from "../../lib/validation"
 import { Link } from "react-router-dom"
+import { createUserAccount } from "@/lib/appwrite/api"
 
 const Register = () => {
   const registerForm = useForm<z.infer<typeof registerFormSchema>>({
@@ -25,8 +26,9 @@ const Register = () => {
     },
   })
 
-  function onSubmit(values: z.infer<typeof registerFormSchema>) {
-    console.log(values)
+  async function onSubmit(values: z.infer<typeof registerFormSchema>) {
+    const newAccount = await createUserAccount(values)
+    console.log(newAccount)
   }
   return (
     <div className="w-3/4 md:w-1/2 lg:w-1/2 flex flex-col justify-center ">
