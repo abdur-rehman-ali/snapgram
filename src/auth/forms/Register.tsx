@@ -12,8 +12,8 @@ import {
 } from "@/components/ui/form"
 import { Input } from "@/components/ui/input"
 import { registerFormSchema } from "../../lib/validation"
-import { Link } from "react-router-dom"
-import { useCreateUserAccount } from "@/lib/react-query/mutations"
+import { Link, useNavigate } from "react-router-dom"
+import { useCreateUserAccount, useCreateUserSession } from "@/lib/react-query/mutations"
 import { toast } from 'react-toastify';
 import Loader from "@/components/shared/Loader"
 
@@ -28,19 +28,23 @@ const Register = () => {
       password: "",
     },
   })
+  const navigate = useNavigate()
 
-  const { mutateAsync: createUserAccount, isPending: isPending, isError, error } = useCreateUserAccount()
+  const { mutateAsync: createUserAccount, isPending: isUserAccountPending} = useCreateUserAccount()
+  const { mutateAsync: createUserSession, isPending: isUserSessionPending} =  useCreateUserSession()
 
   async function onSubmit(values: z.infer<typeof registerFormSchema>) {
-    registerForm.reset()
     const newAccount = await createUserAccount(values)
+    if (!newAccount) { return }
 
-    if (isError) {
-      return toast.error(error.message)
-    } else {
-      toast.success("New account has been created!")
-    }
-    console.log(newAccount)
+    const session = await createUserSession({
+      email: values.email,
+      password: values.password
+    })
+    if (!session) { return }
+    toast.success("Your account has been created successfully")
+    registerForm.reset()
+    navigate("/");
   }
   return (
     <div className="w-3/4 md:w-1/2 lg:w-1/2 flex flex-col justify-center ">
@@ -105,7 +109,7 @@ const Register = () => {
           />
           <Button type="submit" className="shad-button_primary w-full rounded-xl">
             {
-              isPending ? (
+              (isUserAccountPending || isUserSessionPending) ? (
                 <div className="flex gap-2 justify-center items-center">
                   <Loader /> Loading...
                 </div>

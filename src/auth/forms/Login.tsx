@@ -12,7 +12,11 @@ import {
 } from "@/components/ui/form"
 import { Input } from "@/components/ui/input"
 import { loginFormSchema } from "../../lib/validation"
-import { Link } from "react-router-dom"
+import { Link, useNavigate } from "react-router-dom"
+import { useCreateUserSession } from "@/lib/react-query/mutations"
+import { toast } from 'react-toastify';
+import Loader from "@/components/shared/Loader"
+
 
 const Login = () => {
   const loginForm = useForm<z.infer<typeof loginFormSchema>>({
@@ -23,8 +27,18 @@ const Login = () => {
     },
   })
 
-  function onSubmit(values: z.infer<typeof loginFormSchema>) {
-    console.log(values)
+  const navigate = useNavigate()
+  const { mutateAsync: createUserSession, isPending: isUserSessionPending} =  useCreateUserSession()
+
+  async function onSubmit(values: z.infer<typeof loginFormSchema>) {
+    const session = await createUserSession({
+      email: values.email,
+      password: values.password
+    })
+    if (!session) { return }
+    toast.success("Login successful!")
+    loginForm.reset()
+    navigate("/");
   }
 
   return (
@@ -61,7 +75,15 @@ const Login = () => {
               </FormItem>
             )}
           />
-          <Button type="submit" className="shad-button_primary w-full rounded-xl">Login</Button>
+          <Button type="submit" className="shad-button_primary w-full rounded-xl">
+            {
+              (isUserSessionPending) ? (
+                <div className="flex gap-2 justify-center items-center">
+                  <Loader /> Loading...
+                </div>
+              ) : <div>Login</div>
+            }
+          </Button>
         </form>
       </Form>
 
