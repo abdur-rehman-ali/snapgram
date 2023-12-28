@@ -13,7 +13,10 @@ import {
 import { Input } from "@/components/ui/input"
 import { registerFormSchema } from "../../lib/validation"
 import { Link } from "react-router-dom"
-import { createUserAccount } from "@/lib/appwrite/api"
+import { useCreateUserAccount } from "@/lib/react-query/mutations"
+import { toast } from 'react-toastify';
+import Loader from "@/components/shared/Loader"
+
 
 const Register = () => {
   const registerForm = useForm<z.infer<typeof registerFormSchema>>({
@@ -26,8 +29,17 @@ const Register = () => {
     },
   })
 
+  const { mutateAsync: createUserAccount, isPending: isPending, isError, error } = useCreateUserAccount()
+
   async function onSubmit(values: z.infer<typeof registerFormSchema>) {
+    registerForm.reset()
     const newAccount = await createUserAccount(values)
+
+    if (isError) {
+      return toast.error(error.message)
+    } else {
+      toast.success("New account has been created!")
+    }
     console.log(newAccount)
   }
   return (
@@ -91,7 +103,15 @@ const Register = () => {
               </FormItem>
             )}
           />
-          <Button type="submit" className="shad-button_primary w-full rounded-xl">Register</Button>
+          <Button type="submit" className="shad-button_primary w-full rounded-xl">
+            {
+              isPending ? (
+                <div className="flex gap-2 justify-center items-center">
+                  <Loader /> Loading...
+                </div>
+              ) : <div>Register</div>
+            }
+          </Button>
         </form>
       </Form>
 
