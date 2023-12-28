@@ -25,7 +25,6 @@ export const createUserAccount = async (user: INewUser) => {
     return newUser;
   } catch (error: any) {
     toast.error(error.message);
-    return error;
   }
 };
 
@@ -46,6 +45,17 @@ export const saveUserToDatabase = async (user: {
     return newUser;
   } catch (error: any) {
     toast.error(error.message);
-    return error;
+  }
+}
+
+export const createUserSession = async (user: {
+  email: string,
+  password: string
+}) => {
+  try {
+    const session = await account.createEmailSession(user.email, user.password)
+    return session;
+  } catch (error: any) {
+    toast.error(error.message);
   }
 }
