@@ -16,6 +16,7 @@ import { Link, useNavigate } from "react-router-dom"
 import { useCreateUserSession } from "@/lib/react-query/mutations"
 import { toast } from 'react-toastify';
 import Loader from "@/components/shared/Loader"
+import { getCurrentUser } from "@/lib/appwrite/api"
 
 
 const Login = () => {
@@ -36,6 +37,8 @@ const Login = () => {
       password: values.password
     })
     if (!session) { return }
+    const user = await getCurrentUser()
+    console.log(user);
     toast.success("Login successful!")
     loginForm.reset()
     navigate("/");
