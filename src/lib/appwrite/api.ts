@@ -1,6 +1,6 @@
 import { INewUser } from "@/interfaces";
 import { account, appwriteConfig, avatars, databases } from "./config";
-import { ID } from 'appwrite'
+import { ID, Query } from 'appwrite'
 import { toast } from 'react-toastify';
 
 
@@ -55,6 +55,31 @@ export const createUserSession = async (user: {
   try {
     const session = await account.createEmailSession(user.email, user.password)
     return session;
+  } catch (error: any) {
+    toast.error(error.message);
+  }
+}
+
+export const getCurrentUserAccount = async () => {
+  try {
+    const currentUser = await account.get()
+    return currentUser
+  } catch (error: any) {
+    toast.error(error.message);
+  }
+}
+
+export const getCurrentUser = async () => { 
+  try {
+    const currentUserAccount = await getCurrentUserAccount();
+    if (currentUserAccount) {
+      const currentUser = await databases.listDocuments(
+        appwriteConfig.databaseId,
+        appwriteConfig.usersCollectionId,
+        [Query.equal("accountID", currentUserAccount.$id)]
+      )
+      return currentUser.documents[0];
+    }
   } catch (error: any) {
     toast.error(error.message);
   }
