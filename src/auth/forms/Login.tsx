@@ -16,7 +16,8 @@ import { Link, useNavigate } from "react-router-dom"
 import { useCreateUserSession } from "@/lib/react-query/mutations"
 import { toast } from 'react-toastify';
 import Loader from "@/components/shared/Loader"
-import { getCurrentUser } from "@/lib/appwrite/api"
+import { useUserContext } from "@/context/AuthProvider"
+
 
 
 const Login = () => {
@@ -27,6 +28,7 @@ const Login = () => {
       password: "",
     },
   })
+  const { checkAuthenticatedUser, isLoading: isUserLoading } = useUserContext()
 
   const navigate = useNavigate()
   const { mutateAsync: createUserSession, isPending: isUserSessionPending} =  useCreateUserSession()
@@ -37,11 +39,14 @@ const Login = () => {
       password: values.password
     })
     if (!session) { return }
-    const user = await getCurrentUser()
-    console.log(user);
-    toast.success("Login successful!")
-    loginForm.reset()
-    navigate("/");
+    const loggedInUser = await checkAuthenticatedUser()
+    if (loggedInUser) { 
+      toast.success("Login successful!")
+      loginForm.reset()
+      navigate("/");
+    } else {
+      toast.error("Something went wrong. Please try again")
+    }
   }
 
   return (
@@ -80,7 +85,7 @@ const Login = () => {
           />
           <Button type="submit" className="shad-button_primary w-full rounded-xl">
             {
-              (isUserSessionPending) ? (
+              (isUserSessionPending || isUserLoading) ? (
                 <div className="flex gap-2 justify-center items-center">
                   <Loader /> Loading...
                 </div>

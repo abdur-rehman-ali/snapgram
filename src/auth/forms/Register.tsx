@@ -16,6 +16,7 @@ import { Link, useNavigate } from "react-router-dom"
 import { useCreateUserAccount, useCreateUserSession } from "@/lib/react-query/mutations"
 import { toast } from 'react-toastify';
 import Loader from "@/components/shared/Loader"
+import { useUserContext } from "@/context/AuthProvider"
 
 
 const Register = () => {
@@ -29,6 +30,7 @@ const Register = () => {
     },
   })
   const navigate = useNavigate()
+  const { checkAuthenticatedUser, isLoading: isUserLoading} = useUserContext()
 
   const { mutateAsync: createUserAccount, isPending: isUserAccountPending} = useCreateUserAccount()
   const { mutateAsync: createUserSession, isPending: isUserSessionPending} =  useCreateUserSession()
@@ -42,9 +44,16 @@ const Register = () => {
       password: values.password
     })
     if (!session) { return }
-    toast.success("Your account has been created successfully")
-    registerForm.reset()
-    navigate("/");
+
+    const loggedInUser = await checkAuthenticatedUser();
+    if (loggedInUser) { 
+      toast.success("Your account has been created successfully")
+      registerForm.reset()
+      navigate("/");
+    } else {
+      toast.error("Something went wrong while registration. Please try again later")
+    }
+   
   }
   return (
     <div className="w-3/4 md:w-1/2 lg:w-1/2 flex flex-col justify-center ">
@@ -109,7 +118,7 @@ const Register = () => {
           />
           <Button type="submit" className="shad-button_primary w-full rounded-xl">
             {
-              (isUserAccountPending || isUserSessionPending) ? (
+              (isUserAccountPending || isUserSessionPending || isUserLoading) ? (
                 <div className="flex gap-2 justify-center items-center">
                   <Loader /> Loading...
                 </div>
