@@ -1,4 +1,9 @@
+import { sidebarLinks } from "@/constants"
+import { Link, useLocation } from "react-router-dom"
+
 const Sidebar = () => {
+  const { pathname } = useLocation()
+
   return (
     <nav className="leftsidebar">
       <div className="flex flex-col gap-10 pl-6">
@@ -20,26 +25,23 @@ const Sidebar = () => {
         </div>
 
         <ul className="flex flex-col gap-2">
-          <li className="leftsidebar-link w-full group">
-            <a href="" className="flex gap-4 items-center p-4 ">
-              <img
-                src="/assets/icons/home.svg"
-                alt="home"
-                className="group-hover:invert-white"
-              />
-              Home
-            </a>
-          </li>
-          <li className="leftsidebar-link w-full group">
-            <a href="" className="flex gap-4 items-center p-4">
-              <img
-                src="/assets/icons/home.svg"
-                alt="home"
-                className="group-hover:invert-white"
-              />
-              Home
-            </a>
-          </li>
+          {
+            sidebarLinks.map(link => {
+              const isActive = pathname === link.route
+              return (
+                <li className={`leftsidebar-link w-full group ${isActive && `bg-primary-500`} `}>
+                  <Link to={`${link.route}`} className="flex gap-4 items-center p-4 ">
+                    <img
+                      src={link.imgURL}
+                      alt="home"
+                      className={isActive ? 'invert-white' : `group-hover:invert-white`}
+                    />
+                    {link.label}
+                  </Link>
+                </li>
+              )
+            })
+          }
         </ul>
       </div>
 
