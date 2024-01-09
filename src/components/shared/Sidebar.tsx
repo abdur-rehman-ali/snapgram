@@ -33,7 +33,7 @@ const Sidebar = () => {
                   <Link to={`${link.route}`} className="flex gap-4 items-center p-4 ">
                     <img
                       src={link.imgURL}
-                      alt="home"
+                      alt={link.label}
                       className={isActive ? 'invert-white' : `group-hover:invert-white`}
                     />
                     {link.label}
