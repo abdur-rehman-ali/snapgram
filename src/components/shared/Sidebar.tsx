@@ -29,7 +29,7 @@ const Sidebar = () => {
             sidebarLinks.map(link => {
               const isActive = pathname === link.route
               return (
-                <li className={`leftsidebar-link w-full group ${isActive && `bg-primary-500`} `}>
+                <li key={link.label} className={`leftsidebar-link w-full group ${isActive && `bg-primary-500`} `}>
                   <Link to={`${link.route}`} className="flex gap-4 items-center p-4 ">
                     <img
                       src={link.imgURL}
