@@ -84,3 +84,12 @@ export const getCurrentUser = async () => {
     toast.error(error.message);
   }
 }
+
+export const deleteUserSession = async () => {
+  try {
+    const session = await account.deleteSession("current");
+    return session;
+  } catch (error: any) {
+    toast.error(error.message);
+  }
+}
