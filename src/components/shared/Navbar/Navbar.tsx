@@ -1,4 +1,15 @@
+import { useDeleteUserSession } from "@/lib/react-query/mutations"
+import { useNavigate } from "react-router-dom"
+
 const Navbar = () => {
+  const navigate = useNavigate()
+  const { mutate: deleteUserSession } = useDeleteUserSession()
+  
+  const handleDeleteUserSession = () => {
+    deleteUserSession()
+    navigate('/login')
+  }
+
   return (
     <nav className="sticky top-0 z-10 flex bg-[#09090A] min-h-[8vh] w-full items-center justify-between px-6 md:hidden">
       <div>
@@ -15,7 +26,7 @@ const Navbar = () => {
             className="h-8 w-8 rounded-full"
           />
         </div>
-        <div>
+        <div className="cursor-pointer" onClick={() => handleDeleteUserSession()}>
           <img
             src="/assets/icons/logout.svg"
             alt="Logout image here"
