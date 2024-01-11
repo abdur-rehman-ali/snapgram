@@ -1,7 +1,17 @@
 import { sidebarLinks } from "@/constants"
 import SidebarLink from "./SidebarLink"
+import { useDeleteUserSession } from "@/lib/react-query/mutations"
+import { useNavigate } from "react-router-dom"
 
 const Sidebar = () => {
+  const navigate = useNavigate()
+  const { mutate: deleteUserSession } = useDeleteUserSession()
+
+  const handleDeleteUserSession = async () => {
+    deleteUserSession()
+    navigate('/login')
+  }
+
   return (
     <nav className="leftsidebar">
       <div className="flex flex-col gap-10 pl-6">
@@ -35,13 +45,16 @@ const Sidebar = () => {
       </div>
 
 
-      <a href="" className="flex gap-4 items-center pl-10">
+      <div
+        className="flex gap-4 items-center pl-10 cursor-pointer"
+        onClick={() => handleDeleteUserSession()}
+      >
         <img
           src="/assets/icons/logout.svg"
           alt="home"
         />
         Logout
-      </a>
+      </div>
 
     </nav>
   )
