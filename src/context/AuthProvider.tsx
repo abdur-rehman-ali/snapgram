@@ -6,7 +6,7 @@ import { getCurrentUser } from '@/lib/appwrite/api';
 import { toast } from 'react-toastify';
 import { useNavigate } from 'react-router-dom';
 
-const INITIAL_USER_VALUES = {
+export const INITIAL_USER_VALUES = {
   id: '',
   username: '',
   name: '',

@@ -2,13 +2,17 @@ import { sidebarLinks } from "@/constants"
 import SidebarLink from "./SidebarLink"
 import { useDeleteUserSession } from "@/lib/react-query/mutations"
 import { useNavigate } from "react-router-dom"
+import { INITIAL_USER_VALUES, useUserContext } from "@/context/AuthProvider"
 
 const Sidebar = () => {
   const navigate = useNavigate()
   const { mutate: deleteUserSession } = useDeleteUserSession()
+  const { user, setIsAuthenticated, setUser } = useUserContext()
 
-  const handleDeleteUserSession = async () => {
+  const handleDeleteUserSession = () => {
     deleteUserSession()
+    setIsAuthenticated(false)
+    setUser(INITIAL_USER_VALUES)
     navigate('/login')
   }
 
@@ -22,13 +26,13 @@ const Sidebar = () => {
         />
         <div className="flex flex-row items-center gap-4">
           <img
-            src="/assets/images/profile.png"
+            src={user.imageURL}
             alt="Profile"
-            className="h-14 w-14 rounded-full"
+            className="h-10 w-10 rounded-full"
           />
           <div className="flex flex-col">
-            <p className="body-bold">Name</p>
-            <p className="small-regular text-light-3">@Username</p>
+            <p className="body-bold">{ user.name }</p>
+            <p className="small-regular text-light-3">@{ user.username}</p>
           </div>
         </div>
 

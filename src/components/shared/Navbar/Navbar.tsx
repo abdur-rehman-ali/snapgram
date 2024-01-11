@@ -1,12 +1,16 @@
+import { INITIAL_USER_VALUES, useUserContext } from "@/context/AuthProvider"
 import { useDeleteUserSession } from "@/lib/react-query/mutations"
 import { useNavigate } from "react-router-dom"
 
 const Navbar = () => {
   const navigate = useNavigate()
   const { mutate: deleteUserSession } = useDeleteUserSession()
-  
+  const { setUser, setIsAuthenticated } = useUserContext()
+
   const handleDeleteUserSession = () => {
     deleteUserSession()
+    setIsAuthenticated(false)
+    setUser(INITIAL_USER_VALUES)
     navigate('/login')
   }
 
