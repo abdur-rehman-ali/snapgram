@@ -5,7 +5,7 @@ import { useNavigate } from "react-router-dom"
 const Navbar = () => {
   const navigate = useNavigate()
   const { mutate: deleteUserSession } = useDeleteUserSession()
-  const { setUser, setIsAuthenticated } = useUserContext()
+  const { setUser, setIsAuthenticated, user } = useUserContext()
 
   const handleDeleteUserSession = () => {
     deleteUserSession()
@@ -23,9 +23,9 @@ const Navbar = () => {
         />
       </div>
       <div className="flex justify-between w-[15%] max-sm:w-[20%]">
-        <div>
+        <div className="cursor-pointer">
           <img
-            src="/assets/icons/profile-placeholder.svg"
+            src={user.imageURL}
             alt="Profile image here"
             className="h-8 w-8 rounded-full"
           />
