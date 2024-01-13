@@ -15,6 +15,7 @@ import {
 import { Input } from "@/components/ui/input"
 import { Textarea } from "@/components/ui/textarea"
 import { postFormSchema } from "@/lib/validation"
+import FileUploader from "../shared/FileUploader/FileUploader"
 
 const CreatePostForm = () => {
 
@@ -22,6 +23,7 @@ const CreatePostForm = () => {
     resolver: zodResolver(postFormSchema),
     defaultValues: {
       caption: "",
+      image: [],
       location: "",
       tags: ""
     },
@@ -47,6 +49,19 @@ const CreatePostForm = () => {
                 <Textarea
                   className="shad-textarea custom-scrollbar"
                   {...field} />
+              </FormControl>
+              <FormMessage className="shad-form_message" />
+            </FormItem>
+          )}
+        />
+        <FormField
+          control={postForm.control}
+          name="image"
+          render={({ field }) => (
+            <FormItem>
+              <FormLabel className="font-semibold text-lg">Image</FormLabel>
+              <FormControl>
+                <FileUploader fieldChange={field.onChange}/>
               </FormControl>
               <FormMessage className="shad-form_message" />
             </FormItem>
