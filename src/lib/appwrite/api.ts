@@ -1,5 +1,5 @@
-import { INewUser } from "@/interfaces";
-import { account, appwriteConfig, avatars, databases } from "./config";
+import { INewPost, INewUser } from "@/interfaces";
+import { account, appwriteConfig, avatars, databases, storage } from "./config";
 import { ID, Query } from 'appwrite'
 import { toast } from 'react-toastify';
 
@@ -91,5 +91,84 @@ export const deleteUserSession = async () => {
     return session;
   } catch (error: any) {
     toast.error(error.message);
+  }
+}
+
+export const createPost = async (post: INewPost) => {
+  try {
+    const uploadedFile = await uploadFile(post.file[0])
+    if (!uploadedFile) throw Error;
+
+    const fileURL = await getUploadFilePreview(uploadedFile.$id)
+    if (!fileURL) {
+      await deleteFile(uploadedFile.$id)
+      throw Error;
+    } 
+
+    const tags = post.tags?.replace(/ /g, "").split(',') || [];
+
+    const createdPost = await databases.createDocument(
+      appwriteConfig.databaseId,
+      appwriteConfig.postsCollectionId,
+      ID.unique(),
+      {
+        creator: post.userID,
+        caption: post.caption,
+        imageURL: fileURL,
+        imageID: uploadedFile.$id,
+        location: post.location,
+        tags: tags,
+      }
+    );
+
+    if (!createdPost) {
+      await deleteFile(uploadedFile.$id);
+      throw Error;
+    }
+
+    return createdPost;
+  } catch (error: any) {
+    toast.error(error.message);
+  }
+}
+
+export const uploadFile = async (file: File) => {
+  try {
+    const uploadedFile = await storage.createFile(
+      appwriteConfig.storageId,
+      ID.unique(),
+      file
+    );
+    return uploadedFile;
+  } catch (error: any) {
+    toast.error(error.message);
+    return null;
+  }
+}
+
+export const getUploadFilePreview = async (fileID: string) => {
+  try {
+    const uploadedFileURL = await storage.getFilePreview(
+      appwriteConfig.storageId,
+      fileID
+    );
+    if (!uploadedFileURL) throw Error
+    return uploadedFileURL;
+  } catch (error: any) {
+    toast.error(error.message);
+    return null;
+  }
+}
+
+export const deleteFile = async (fileID: string) => {
+  try {
+    const deletedFile = await storage.deleteFile(
+      appwriteConfig.storageId,
+      fileID
+    );
+    return deletedFile;
+  } catch (error: any) {
+    toast.error(error.message);
+    return null;
   }
 }

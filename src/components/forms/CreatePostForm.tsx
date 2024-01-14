@@ -16,6 +16,10 @@ import { Input } from "@/components/ui/input"
 import { Textarea } from "@/components/ui/textarea"
 import { postFormSchema } from "@/lib/validation"
 import FileUploader from "../shared/FileUploader/FileUploader"
+import { useCreatePost } from "@/lib/react-query/mutations"
+import { useUserContext } from "@/context/AuthProvider"
+import { useNavigate } from "react-router-dom"
+import { toast } from "react-toastify"
 
 const CreatePostForm = () => {
 
@@ -29,8 +33,21 @@ const CreatePostForm = () => {
     },
   })
 
-  function onSubmit(values: z.infer<typeof postFormSchema>) {
-    console.log(values)
+  const { mutateAsync: createPost } = useCreatePost()
+  const { user } = useUserContext()
+  const navigate = useNavigate()
+
+  async function onSubmit(values: z.infer<typeof postFormSchema>) {
+    const { caption, image, location, tags } = values
+    await createPost({
+      caption,
+      location,
+      tags,
+      file: image,
+      userID: user.id
+    })
+    navigate('/')
+    toast.success("New post created successfully")
   }
 
   return (
@@ -61,7 +78,7 @@ const CreatePostForm = () => {
             <FormItem>
               <FormLabel className="font-semibold text-lg">Image</FormLabel>
               <FormControl>
-                <FileUploader fieldChange={field.onChange}/>
+                <FileUploader fieldChange={field.onChange} />
               </FormControl>
               <FormMessage className="shad-form_message" />
             </FormItem>
