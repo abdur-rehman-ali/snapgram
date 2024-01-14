@@ -22,3 +22,11 @@ export type IContextType = {
   setIsAuthenticated: React.Dispatch<React.SetStateAction<boolean>>;
   checkAuthenticatedUser: () => Promise<boolean>;
 };
+
+export type INewPost = {
+  userID: string;
+  caption?: string;
+  file: File[];
+  location?: string;
+  tags?: string;
+};

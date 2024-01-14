@@ -1,6 +1,6 @@
-import { INewUser } from '@/interfaces'
+import { INewPost, INewUser } from '@/interfaces'
 import { useMutation } from '@tanstack/react-query'
-import { createUserAccount, createUserSession, deleteUserSession } from '../appwrite/api'
+import { createPost, createUserAccount, createUserSession, deleteUserSession } from '../appwrite/api'
 
 export const useCreateUserAccount = () => {
   return useMutation({
@@ -17,3 +17,9 @@ export const useCreateUserSession = () => {
 }
 
 export const useDeleteUserSession = () => useMutation({ mutationFn: deleteUserSession })
+
+export const useCreatePost = () => {
+  return useMutation({
+    mutationFn: (post: INewPost) => createPost(post),
+  });
+};
