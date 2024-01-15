@@ -1,3 +1,4 @@
+import { timeAgo } from "@/lib/utils";
 import { Models } from "appwrite";
 
 const PostCard = ({ post }: { post: Models.Document }) => {
@@ -22,13 +23,18 @@ const PostCard = ({ post }: { post: Models.Document }) => {
               {caption}
             </p>
             <div className="flex-center gap-2 text-light-3">
-              <p className="subtle-semibold lg:small-regular ">
-                {$createdAt}
-              </p>
-              •
               <p className="subtle-semibold lg:small-regular">
-                {location}
+                {timeAgo($createdAt)}
               </p>
+              {
+                location &&
+                <>
+                  <span>•</span>
+                  <p className="subtle-semibold lg:small-regular">
+                    {location}
+                  </p>
+                </>
+              }
             </div>
           </div>
         </div>
