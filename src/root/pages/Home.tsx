@@ -3,7 +3,7 @@ import Loader from "@/components/shared/Loader"
 import { useGetPosts } from "@/lib/react-query/queries"
 
 const Home = () => {
-  const { data: posts, isPending, isError, error } = useGetPosts()
+  const { data: posts, isPending } = useGetPosts()
 
   return (
     <div className="home-posts">
