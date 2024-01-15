@@ -172,3 +172,18 @@ export const deleteFile = async (fileID: string) => {
     return null;
   }
 }
+
+export const getAllPosts = async () => {
+  try {
+    const allPosts = await databases.listDocuments(
+      appwriteConfig.databaseId,
+      appwriteConfig.postsCollectionId,
+      [
+        Query.orderDesc('$createdAt')
+      ]
+    )
+    return allPosts;
+  } catch (error: any) {
+    toast.error(error.message);  
+  }
+}

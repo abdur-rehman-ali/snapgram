@@ -1,5 +1,8 @@
+import { Models } from "appwrite";
 
-const PostCard = () => {
+const PostCard = ({ post }: { post: Models.Document }) => {
+  const { creator, caption, location, tags, $createdAt, imageURL } = post
+  debugger
   return (
     <div className="post-card">
       <div className="flex-between">
@@ -7,6 +10,7 @@ const PostCard = () => {
           <div>
             <img
               src={
+                creator.imageURL ||
                 "/assets/icons/profile-placeholder.svg"
               }
               alt="creator"
@@ -16,15 +20,15 @@ const PostCard = () => {
 
           <div className="flex flex-col">
             <p className="base-medium lg:body-bold text-light-1">
-              Joiya
+              {caption}
             </p>
             <div className="flex-center gap-2 text-light-3">
               <p className="subtle-semibold lg:small-regular ">
-                2 hours ago
+                {$createdAt}
               </p>
               •
               <p className="subtle-semibold lg:small-regular">
-                Texas
+                {location}
               </p>
             </div>
           </div>
@@ -42,22 +46,19 @@ const PostCard = () => {
 
       <div >
         <div className="small-medium lg:base-medium py-5">
-          <p>Hard work beats talent</p>
           <ul className="flex gap-1 mt-2">
-            <li className="text-light-3 small-regular">
-              #react
-            </li>
-            <li className="text-light-3 small-regular">
-              #angular
-            </li>
-            <li className="text-light-3 small-regular">
-              #typescript
-            </li>
+            {
+              tags.length > 0 && tags.map((tag: string, index: string) => (
+                <li className="text-light-3 small-regular" key={index}>
+                  #{tag}
+                </li>
+              ))
+            }
           </ul>
         </div>
 
         <img
-          src={"/assets/icons/wallpaper.svg"}
+          src={imageURL || "/assets/icons/wallpaper.svg"}
           alt="post image"
           className="post-card_img"
         />
