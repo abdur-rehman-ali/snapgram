@@ -1,8 +1,12 @@
+import { useUserContext } from "@/context/AuthProvider";
 import { timeAgo } from "@/lib/utils";
 import { Models } from "appwrite";
 
 const PostCard = ({ post }: { post: Models.Document }) => {
   const { creator, caption, location, tags, $createdAt, imageURL } = post
+  const { user } = useUserContext()
+  const isUserAuthor = (user.id === creator.$id)
+
   return (
     <div className="post-card">
       <div className="flex-between">
@@ -40,12 +44,15 @@ const PostCard = ({ post }: { post: Models.Document }) => {
         </div>
 
         <div>
-          <img
-            src={"/assets/icons/edit.svg"}
-            alt="edit"
-            width={20}
-            height={20}
-          />
+          {
+            isUserAuthor &&
+            <img
+              src={"/assets/icons/edit.svg"}
+              alt="edit"
+              width={20}
+              height={20}
+            />
+          }
         </div>
       </div>
 
