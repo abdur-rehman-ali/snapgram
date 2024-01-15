@@ -2,6 +2,7 @@ import { INewPost, INewUser } from "@/interfaces";
 import { account, appwriteConfig, avatars, databases, storage } from "./config";
 import { ID, Query } from 'appwrite'
 import { toast } from 'react-toastify';
+import { getTagsArray } from "../utils";
 
 
 export const createUserAccount = async (user: INewUser) => {
@@ -105,7 +106,7 @@ export const createPost = async (post: INewPost) => {
       throw Error;
     } 
 
-    const tags = post.tags?.replace(/ /g, "").split(',') || [];
+    const tags = getTagsArray(post.tags)
 
     const createdPost = await databases.createDocument(
       appwriteConfig.databaseId,
@@ -150,7 +151,11 @@ export const getUploadFilePreview = async (fileID: string) => {
   try {
     const uploadedFileURL = await storage.getFilePreview(
       appwriteConfig.storageId,
-      fileID
+      fileID,
+      1800,               
+      0,                  
+      'center',          
+      50,
     );
     if (!uploadedFileURL) throw Error
     return uploadedFileURL;
