@@ -2,7 +2,6 @@ import { Models } from "appwrite";
 
 const PostCard = ({ post }: { post: Models.Document }) => {
   const { creator, caption, location, tags, $createdAt, imageURL } = post
-  debugger
   return (
     <div className="post-card">
       <div className="flex-between">
