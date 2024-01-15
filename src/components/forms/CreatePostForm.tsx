@@ -20,6 +20,7 @@ import { useCreatePost } from "@/lib/react-query/mutations"
 import { useUserContext } from "@/context/AuthProvider"
 import { useNavigate } from "react-router-dom"
 import { toast } from "react-toastify"
+import { Loader } from "lucide-react"
 
 const CreatePostForm = () => {
 
@@ -33,12 +34,18 @@ const CreatePostForm = () => {
     },
   })
 
-  const { mutateAsync: createPost } = useCreatePost()
+  const { mutateAsync: createPost, isPending: isPostLoading } = useCreatePost()
   const { user } = useUserContext()
   const navigate = useNavigate()
 
   async function onSubmit(values: z.infer<typeof postFormSchema>) {
     const { caption, image, location, tags } = values
+
+    if (!image || image.length === 0) {
+      toast.error("Image is required") 
+      return
+    }
+
     await createPost({
       caption,
       location,
@@ -119,8 +126,11 @@ const CreatePostForm = () => {
         <Button
           type="submit"
           className="shad-button_primary rounded-2xl font-semibold"
+          disabled={isPostLoading}
         >
-          Create Post
+          {
+            isPostLoading ? <Loader/> :  "Create Post"
+          }
         </Button>
       </form>
     </Form>

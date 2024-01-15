@@ -13,7 +13,7 @@ export const loginFormSchema = z.object({
 })
 
 export const postFormSchema = z.object({
-  caption: z.string().max(2200, { message: "Maximum 2,200 characters." }),
+  caption: z.string().min(2, { message: "Caption is required" }).max(2200, { message: "Maximum 2,200 characters." }),
   image: z.custom<File[]>(),
   location: z.string().max(200),
   tags: z.string(),
