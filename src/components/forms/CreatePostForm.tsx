@@ -21,16 +21,21 @@ import { useUserContext } from "@/context/AuthProvider"
 import { useNavigate } from "react-router-dom"
 import { toast } from "react-toastify"
 import { Loader } from "lucide-react"
+import { Models } from "appwrite"
 
-const CreatePostForm = () => {
+type CreatePostFormProps = {
+  post?: Models.Document,
+}
+
+const CreatePostForm = ({ post }: CreatePostFormProps) => {
 
   const postForm = useForm<z.infer<typeof postFormSchema>>({
     resolver: zodResolver(postFormSchema),
     defaultValues: {
-      caption: "",
+      caption: post ? post.caption : "",
       image: [],
-      location: "",
-      tags: ""
+      location: post ? post.location : "",
+      tags: post ? post.tags.join(', ') : ""
     },
   })
 
@@ -42,7 +47,7 @@ const CreatePostForm = () => {
     const { caption, image, location, tags } = values
 
     if (!image || image.length === 0) {
-      toast.error("Image is required") 
+      toast.error("Image is required")
       return
     }
 
@@ -85,7 +90,7 @@ const CreatePostForm = () => {
             <FormItem>
               <FormLabel className="font-semibold text-lg">Image</FormLabel>
               <FormControl>
-                <FileUploader fieldChange={field.onChange} />
+                <FileUploader fieldChange={field.onChange} imageURL={post?.imageURL} />
               </FormControl>
               <FormMessage className="shad-form_message" />
             </FormItem>
@@ -129,7 +134,7 @@ const CreatePostForm = () => {
           disabled={isPostLoading}
         >
           {
-            isPostLoading ? <Loader/> :  "Create Post"
+            isPostLoading ? <Loader /> : (post ? "Update Post" : "Create Post")
           }
         </Button>
       </form>
