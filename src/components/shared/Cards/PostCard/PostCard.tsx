@@ -1,9 +1,10 @@
 import { useUserContext } from "@/context/AuthProvider";
 import { timeAgo } from "@/lib/utils";
 import { Models } from "appwrite";
+import { Link } from "react-router-dom";
 
 const PostCard = ({ post }: { post: Models.Document }) => {
-  const { creator, caption, location, tags, $createdAt, imageURL } = post
+  const { creator, caption, location, tags, $createdAt, imageURL, $id } = post
   const { user } = useUserContext()
   const isUserAuthor = (user.id === creator.$id)
 
@@ -46,12 +47,14 @@ const PostCard = ({ post }: { post: Models.Document }) => {
         <div>
           {
             isUserAuthor &&
-            <img
-              src={"/assets/icons/edit.svg"}
-              alt="edit"
-              width={20}
-              height={20}
-            />
+            <Link to={`/posts/edit/${$id}`}>
+              <img
+                src={"/assets/icons/edit.svg"}
+                alt="edit"
+                width={20}
+                height={20}
+              />
+            </Link>
           }
         </div>
       </div>
