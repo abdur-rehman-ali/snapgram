@@ -14,6 +14,7 @@ export const useGetSinglePost = (postID: string) => {
   return useQuery({
     queryKey: [QUERY_KEYS.GET_SINGLE_POST, postID],
     queryFn: async () => await getSinglePost(postID),
+    staleTime: Infinity,
     enabled: !!postID,
   })
 }
