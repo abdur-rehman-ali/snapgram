@@ -27,7 +27,7 @@ const PostCard = ({ post }: { post: Models.Document }) => {
             <p className="base-medium lg:body-bold text-light-1">
               {caption}
             </p>
-            <div className="flex-center gap-2 text-light-3">
+            <div className="flex items-center gap-2 text-light-3">
               <p className="subtle-semibold lg:small-regular">
                 {timeAgo($createdAt)}
               </p>
