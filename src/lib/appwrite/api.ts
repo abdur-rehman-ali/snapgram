@@ -70,7 +70,7 @@ export const getCurrentUserAccount = async () => {
   }
 }
 
-export const getCurrentUser = async () => { 
+export const getCurrentUser = async () => {
   try {
     const currentUserAccount = await getCurrentUserAccount();
     if (currentUserAccount) {
@@ -104,7 +104,7 @@ export const createPost = async (post: INewPost) => {
     if (!fileURL) {
       await deleteFile(uploadedFile.$id)
       throw Error;
-    } 
+    }
 
     const tags = getTagsArray(post.tags)
 
@@ -152,9 +152,9 @@ export const getUploadFilePreview = async (fileID: string) => {
     const uploadedFileURL = await storage.getFilePreview(
       appwriteConfig.storageId,
       fileID,
-      1800,               
-      0,                  
-      'center',          
+      1800,
+      0,
+      'center',
       50,
     );
     if (!uploadedFileURL) throw Error
@@ -189,6 +189,19 @@ export const getAllPosts = async () => {
     )
     return allPosts;
   } catch (error: any) {
-    toast.error(error.message);  
+    toast.error(error.message);
+  }
+}
+
+export const getSinglePost = async (postID: string) => {
+  try {
+    const post = await databases.getDocument(
+      appwriteConfig.databaseId,
+      appwriteConfig.postsCollectionId,
+      postID,
+    )
+    return post;
+  } catch (error: any) {
+    toast.error(error.message);
   }
 }

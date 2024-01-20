@@ -5,10 +5,11 @@ import ImageBoxContainer from './ImageBoxContainer'
 
 type FileUploaderProps = {
   fieldChange: (files: File[]) => void;
+  imageURL?: string,
 };
 
-const FileUploader = ({ fieldChange }: FileUploaderProps) => {
-  const [fileURL, setFileURL] = useState('')
+const FileUploader = ({ fieldChange, imageURL }: FileUploaderProps) => {
+  const [fileURL, setFileURL] = useState(imageURL)
 
   const onDrop = useCallback((acceptedFiles: FileWithPath[]) => {
     setFileURL(URL.createObjectURL(acceptedFiles[0]));

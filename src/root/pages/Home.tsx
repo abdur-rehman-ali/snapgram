@@ -1,6 +1,6 @@
 import PostCard from "@/components/shared/Cards/PostCard/PostCard"
-import Loader from "@/components/shared/Loader"
 import { useGetPosts } from "@/lib/react-query/queries"
+import { Loader } from "lucide-react"
 
 const Home = () => {
   const { data: posts, isPending } = useGetPosts()
