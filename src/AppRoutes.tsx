@@ -3,7 +3,7 @@ import Register from './auth/forms/Register';
 import Login from './auth/forms/Login';
 import AuthLayout from './auth/AuthLayout';
 import RootLayout from './root/RootLayout';
-import { Explore, Home, Users, Saved, CreatePost } from './root';
+import { Explore, Home, Users, Saved, CreatePost, EditPost } from './root';
 import { ToastContainer } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 
@@ -21,6 +21,7 @@ const AppRoutes = () => {
           <Route path='/users' element={<Users />} />
           <Route path='/saved' element={<Saved />} />
           <Route path='/posts/new' element={<CreatePost />} />
+          <Route path='/posts/edit/:postID' element={<EditPost />} />
         </Route>
       </Routes>
       <ToastContainer
