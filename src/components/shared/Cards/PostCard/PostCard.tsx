@@ -24,8 +24,8 @@ const PostCard = ({ post }: { post: Models.Document }) => {
           </div>
 
           <div className="flex flex-col">
-            <p className="base-medium lg:body-bold text-light-1">
-              {caption}
+            <p className="base-medium lg:body-bold text-light-2">
+              {creator.username}
             </p>
             <div className="flex items-center gap-2 text-light-3">
               <p className="subtle-semibold lg:small-regular">
@@ -61,6 +61,7 @@ const PostCard = ({ post }: { post: Models.Document }) => {
 
       <div >
         <div className="small-medium lg:base-medium py-5">
+          <div className="text-light-3 font-bold">{caption}</div>
           <ul className="flex gap-1 mt-2">
             {
               tags.length > 0 && tags.map((tag: string, index: string) => (
