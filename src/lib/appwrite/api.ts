@@ -1,4 +1,4 @@
-import { INewPost, INewUser } from "@/interfaces";
+import { INewPost, INewUser, IUpdatePost } from "@/interfaces";
 import { account, appwriteConfig, avatars, databases, storage } from "./config";
 import { ID, Query } from 'appwrite'
 import { toast } from 'react-toastify';
@@ -201,6 +201,25 @@ export const getSinglePost = async (postID: string) => {
       postID,
     )
     return post;
+  } catch (error: any) {
+    toast.error(error.message);
+  }
+}
+
+export const updateSinglePost = async (postData: IUpdatePost) => {
+  try {
+    const tags = getTagsArray(postData.tags)
+    const updatedDocument = await databases.updateDocument(
+      appwriteConfig.databaseId,
+      appwriteConfig.postsCollectionId,
+      postData.postId,
+      {
+        caption: postData.caption,
+        location: postData.location,
+        tags: tags
+      }
+    );
+    return updatedDocument;
   } catch (error: any) {
     toast.error(error.message);
   }

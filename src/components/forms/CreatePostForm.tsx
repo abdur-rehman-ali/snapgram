@@ -16,7 +16,7 @@ import { Input } from "@/components/ui/input"
 import { Textarea } from "@/components/ui/textarea"
 import { postFormSchema } from "@/lib/validation"
 import FileUploader from "../shared/FileUploader/FileUploader"
-import { useCreatePost } from "@/lib/react-query/mutations"
+import { useCreatePost, useUpdatePost } from "@/lib/react-query/mutations"
 import { useUserContext } from "@/context/AuthProvider"
 import { useNavigate } from "react-router-dom"
 import { toast } from "react-toastify"
@@ -40,26 +40,42 @@ const CreatePostForm = ({ post }: CreatePostFormProps) => {
   })
 
   const { mutateAsync: createPost, isPending: isPostLoading } = useCreatePost()
+  const { mutateAsync: updatePost, isPending: isPostUpdateLoading } = useUpdatePost()
+
   const { user } = useUserContext()
   const navigate = useNavigate()
 
   async function onSubmit(values: z.infer<typeof postFormSchema>) {
     const { caption, image, location, tags } = values
 
-    if (!image || image.length === 0) {
-      toast.error("Image is required")
-      return
-    }
+    if (post) {
+      await updatePost({
+        postId: post.$id,
+        caption,
+        tags,
+        location,
+        imageId: post.imageID,
+        imageUrl: post.imageUrl,
+        file: []
+      })
+      navigate('/')
+      toast.success("Post updated successfully")
+    } else {
+      if (!image || image.length === 0) {
+        toast.error("Image is required")
+        return
+      }
 
-    await createPost({
-      caption,
-      location,
-      tags,
-      file: image,
-      userID: user.id
-    })
-    navigate('/')
-    toast.success("New post created successfully")
+      await createPost({
+        caption,
+        location,
+        tags,
+        file: image,
+        userID: user.id
+      })
+      navigate('/')
+      toast.success("New post created successfully")
+    }
   }
 
   return (
@@ -134,7 +150,7 @@ const CreatePostForm = ({ post }: CreatePostFormProps) => {
           disabled={isPostLoading}
         >
           {
-            isPostLoading ? <Loader /> : (post ? "Update Post" : "Create Post")
+            isPostLoading || isPostUpdateLoading ? <Loader /> : (post ? "Update Post" : "Create Post")
           }
         </Button>
       </form>
