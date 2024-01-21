@@ -1,6 +1,6 @@
-import { INewPost, INewUser } from '@/interfaces'
+import { INewPost, INewUser, IUpdatePost } from '@/interfaces'
 import { useMutation } from '@tanstack/react-query'
-import { createPost, createUserAccount, createUserSession, deleteUserSession } from '../appwrite/api'
+import { createPost, createUserAccount, createUserSession, deleteUserSession, updateSinglePost } from '../appwrite/api'
 import { queryClient } from './QueryProvider'
 import { QUERY_KEYS } from './queryKeys'
 
@@ -28,3 +28,12 @@ export const useCreatePost = () => {
     }
   });
 };
+
+export const useUpdatePost = () => {
+  return useMutation({
+    mutationFn: (post: IUpdatePost) => updateSinglePost(post),
+    onSuccess: (data) => {
+      queryClient.invalidateQueries({ queryKey: [QUERY_KEYS.GET_POSTS] })
+    }
+  })
+}
