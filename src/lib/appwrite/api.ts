@@ -207,7 +207,20 @@ export const getSinglePost = async (postID: string) => {
 }
 
 export const updateSinglePost = async (postData: IUpdatePost) => {
+  const { file, imageId, imageUrl } = postData;
   try {
+    let uploadedFile = null;
+    let updateFileURL = null;
+    if (file.length > 0) {
+      uploadedFile = await uploadFile(file[0]);
+      if (!uploadedFile) throw Error;
+
+      updateFileURL = await getUploadFilePreview(uploadedFile.$id)
+      if (!updateFileURL) {
+        await deleteFile(uploadedFile.$id)
+        throw Error;
+      };
+    }
     const tags = getTagsArray(postData.tags)
     const updatedDocument = await databases.updateDocument(
       appwriteConfig.databaseId,
@@ -216,9 +229,15 @@ export const updateSinglePost = async (postData: IUpdatePost) => {
       {
         caption: postData.caption,
         location: postData.location,
-        tags: tags
+        tags: tags,
+        imageID: uploadedFile ? uploadedFile?.$id : imageId,
+        imageURL: updateFileURL ? updateFileURL : imageUrl,
       }
     );
+
+    if (uploadedFile) { 
+      await deleteFile(imageId)
+    }
     return updatedDocument;
   } catch (error: any) {
     toast.error(error.message);

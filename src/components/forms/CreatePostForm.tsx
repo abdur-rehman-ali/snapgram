@@ -55,8 +55,8 @@ const CreatePostForm = ({ post }: CreatePostFormProps) => {
         tags,
         location,
         imageId: post.imageID,
-        imageUrl: post.imageUrl,
-        file: []
+        imageUrl: post.imageURL,
+        file: image
       })
       navigate('/')
       toast.success("Post updated successfully")
