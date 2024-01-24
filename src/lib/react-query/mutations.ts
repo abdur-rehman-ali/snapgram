@@ -1,6 +1,6 @@
 import { INewPost, INewUser, IUpdatePost } from '@/interfaces'
 import { useMutation } from '@tanstack/react-query'
-import { createPost, createUserAccount, createUserSession, deleteUserSession, updateSinglePost } from '../appwrite/api'
+import { createPost, createUserAccount, createUserSession, deleteUserSession, updateLikeOnPost, updateSinglePost } from '../appwrite/api'
 import { queryClient } from './QueryProvider'
 import { QUERY_KEYS } from './queryKeys'
 
@@ -33,6 +33,15 @@ export const useUpdatePost = () => {
   return useMutation({
     mutationFn: (post: IUpdatePost) => updateSinglePost(post),
     onSuccess: (data) => {
+      queryClient.invalidateQueries({ queryKey: [QUERY_KEYS.GET_POSTS] })
+    }
+  })
+}
+
+export const useUpdateLikeOnPost = () => {
+  return useMutation({
+    mutationFn: ({ postID, userID }: { postID: string, userID: string }) => updateLikeOnPost(postID, userID),
+    onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: [QUERY_KEYS.GET_POSTS] })
     }
   })

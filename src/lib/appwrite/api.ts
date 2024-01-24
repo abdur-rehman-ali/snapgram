@@ -1,8 +1,8 @@
 import { INewPost, INewUser, IUpdatePost } from "@/interfaces";
 import { account, appwriteConfig, avatars, databases, storage } from "./config";
-import { ID, Query } from 'appwrite'
+import { ID, Query, Models } from 'appwrite'
 import { toast } from 'react-toastify';
-import { getTagsArray } from "../utils";
+import { getPostLikesList, getTagsArray } from "../utils";
 
 
 export const createUserAccount = async (user: INewUser) => {
@@ -244,6 +244,39 @@ export const updateSinglePost = async (postData: IUpdatePost) => {
       await deleteFile(imageId)
     }
     return updatedDocument;
+  } catch (error: any) {
+    toast.error(error.message);
+  }
+}
+
+export const updateLikeOnPost = async (postID: string, userID: string) => {
+  try {
+    // First of all find that post, whose like button has been clicked
+    const post = await getSinglePost(postID)
+    if (!post) return;
+    // Get all the ids of users who has liked this post
+    const postLikesList = getPostLikesList(post)
+    // copy all the likes in the likesArray
+    let likesArray = [...postLikesList]
+    // If user has already liked, then remove that like 
+    // else add userID of that user to like list array
+    if (postLikesList.includes(userID)) {
+      // If user has already liked, then remove that like
+      likesArray = postLikesList.filter((like: string) => like !== userID)
+    } else {
+      // If user has not liked that post, add id of user in like list
+      likesArray = [...likesArray, userID]
+    }
+    // Update the post in database
+    const updatedPost = await databases.updateDocument(
+      appwriteConfig.databaseId,
+      appwriteConfig.postsCollectionId,
+      postID,
+      {
+        likes: likesArray
+      }
+    )
+    return updatedPost
   } catch (error: any) {
     toast.error(error.message);
   }
