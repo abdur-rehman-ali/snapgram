@@ -1,3 +1,4 @@
+import { Models } from "appwrite"
 import { type ClassValue, clsx } from "clsx"
 import { twMerge } from "tailwind-merge"
 
@@ -28,4 +29,12 @@ export const timeAgo = (dateString: string) => {
   } else {
     return `${seconds} second${seconds !== 1 ? 's' : ''} ago`;
   }
+}
+
+export const getPostLikesList = (post: Models.Document) => {
+  return post.likes.map((like: Models.Document) => like.$id)
+}
+
+export const isPostLiked = (post: Models.Document, userID: string) => {
+  return getPostLikesList(post).includes(userID)
 }

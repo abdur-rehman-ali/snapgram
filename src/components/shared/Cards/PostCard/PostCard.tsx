@@ -2,6 +2,7 @@ import { useUserContext } from "@/context/AuthProvider";
 import { timeAgo } from "@/lib/utils";
 import { Models } from "appwrite";
 import { Link } from "react-router-dom";
+import PostStats from "./PostStats";
 
 const PostCard = ({ post }: { post: Models.Document }) => {
   const { creator, caption, location, tags, $createdAt, imageURL, $id } = post
@@ -79,6 +80,7 @@ const PostCard = ({ post }: { post: Models.Document }) => {
           className="post-card_img"
         />
       </div>
+      <PostStats post={post} />
     </div>
   );
 }
