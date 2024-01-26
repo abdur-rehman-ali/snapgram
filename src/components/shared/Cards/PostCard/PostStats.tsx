@@ -1,11 +1,12 @@
 import { useUserContext } from '@/context/AuthProvider'
-import { useUpdateLikeOnPost } from '@/lib/react-query/mutations'
+import { useSavePost, useUpdateLikeOnPost } from '@/lib/react-query/mutations'
 import { isPostLiked } from '@/lib/utils'
 import { Models } from 'appwrite'
 
 const PostStats = ({ post }: { post: Models.Document }) => {
   const { user } = useUserContext()
   const { mutate: likePost } = useUpdateLikeOnPost()
+  const { mutate: savePost } = useSavePost()
   return (
     <div className='flex justify-between'>
       <img
@@ -25,6 +26,7 @@ const PostStats = ({ post }: { post: Models.Document }) => {
         className='cursor-pointer'
         width={20}
         height={20}
+        onClick={() => savePost({ postID: post.$id, userID: user.id })}
       />
     </div>
   )

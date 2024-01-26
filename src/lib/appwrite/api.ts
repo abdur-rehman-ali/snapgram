@@ -281,3 +281,20 @@ export const updateLikeOnPost = async (postID: string, userID: string) => {
     toast.error(error.message);
   }
 }
+
+export const savePost = async (postID: string, userID: string) => {
+  try {
+    const savedPost = await databases.createDocument(
+      appwriteConfig.databaseId,
+      appwriteConfig.savesCollectionId,
+      ID.unique(),
+      {
+        post: postID,
+        user: userID,
+      }
+    )
+    return savedPost;
+  } catch (error: any) {
+    toast.error(error.message);
+  }
+}
