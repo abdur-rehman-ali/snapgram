@@ -1,5 +1,5 @@
 import { useQuery } from "@tanstack/react-query";
-import { getAllPosts, getSinglePost } from "../appwrite/api";
+import { getAllPosts, getCurrentUser, getSinglePost } from "../appwrite/api";
 import { QUERY_KEYS } from "./queryKeys";
 
 export const useGetPosts = () => {
@@ -16,5 +16,12 @@ export const useGetSinglePost = (postID: string) => {
     queryFn: async () => await getSinglePost(postID),
     staleTime: Infinity,
     enabled: !!postID,
+  })
+}
+
+export const useGetCurrentUser = () => {
+  return useQuery({
+    queryKey: [QUERY_KEYS.GET_CURRENT_USER],
+    queryFn: async () => await getCurrentUser(),
   })
 }

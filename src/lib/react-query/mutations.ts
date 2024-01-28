@@ -1,6 +1,15 @@
 import { INewPost, INewUser, IUpdatePost } from '@/interfaces'
 import { useMutation } from '@tanstack/react-query'
-import { createPost, createUserAccount, createUserSession, deleteUserSession, savePost, updateLikeOnPost, updateSinglePost } from '../appwrite/api'
+import {
+  createPost,
+  createUserAccount,
+  createUserSession,
+  deleteUserSession,
+  savePost,
+  unSaveUserPost,
+  updateLikeOnPost,
+  updateSinglePost
+} from '../appwrite/api'
 import { queryClient } from './QueryProvider'
 import { QUERY_KEYS } from './queryKeys'
 
@@ -50,6 +59,15 @@ export const useUpdateLikeOnPost = () => {
 export const useSavePost = () => {
   return useMutation({
     mutationFn: ({ postID, userID }: { postID: string, userID: string }) => savePost(postID, userID),
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: [QUERY_KEYS.GET_POSTS] })
+    }
+  })
+}
+
+export const useUnSavePost = () => {
+  return useMutation({
+    mutationFn: ({ userID,  postID}: { userID: string, postID: string }) => unSaveUserPost(userID, postID),
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: [QUERY_KEYS.GET_POSTS] })
     }

@@ -1,6 +1,6 @@
 import { INewPost, INewUser, IUpdatePost } from "@/interfaces";
 import { account, appwriteConfig, avatars, databases, storage } from "./config";
-import { ID, Query, Models } from 'appwrite'
+import { ID, Query } from 'appwrite'
 import { toast } from 'react-toastify';
 import { getPostLikesList, getTagsArray } from "../utils";
 
@@ -294,6 +294,50 @@ export const savePost = async (postID: string, userID: string) => {
       }
     )
     return savedPost;
+  } catch (error: any) {
+    toast.error(error.message);
+  }
+}
+
+export const deleteSavedPost = async (postID: string) => {
+  try {
+    const document = await databases.deleteDocument(
+      appwriteConfig.databaseId,
+      appwriteConfig.savesCollectionId,
+      postID
+    )
+    return document;
+  } catch (error: any) {
+    toast.error(error.message);
+  }
+}
+
+export const isPostSavedByUser = async (userID: string, postID: string) => {
+  try {
+    const user = await databases.listDocuments(
+      appwriteConfig.databaseId,
+      appwriteConfig.savesCollectionId,
+      [Query.equal("user", userID), Query.equal("post", postID)]
+    )
+    if (user.total > 0) {
+      return user.documents[0].$id
+    } else {
+      return false
+    }
+  } catch (error: any) {
+    toast.error(error.message);
+  }
+}
+
+export const unSaveUserPost = async (userID: string, postID: string) => {
+  try {
+    const savedPostID = await isPostSavedByUser(userID, postID)
+    if (savedPostID) {
+      const savePostId = savedPostID;
+      deleteSavedPost(savePostId)
+    } else {
+      throw new Error("This post is not saved")
+    }
   } catch (error: any) {
     toast.error(error.message);
   }

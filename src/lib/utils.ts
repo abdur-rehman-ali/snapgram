@@ -38,3 +38,9 @@ export const getPostLikesList = (post: Models.Document) => {
 export const isPostLiked = (post: Models.Document, userID: string) => {
   return getPostLikesList(post).includes(userID)
 }
+
+export const isPostSavedByCurrentUser = (user?: Models.Document, post?: Models.Document) => {
+  return user?.save.find(
+    (record: Models.Document) => record.post.$id === post?.$id
+  );
+}
