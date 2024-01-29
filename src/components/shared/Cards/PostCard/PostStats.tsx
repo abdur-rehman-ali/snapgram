@@ -29,17 +29,20 @@ const PostStats = ({ post }: { post: Models.Document }) => {
 
   return (
     <div className='flex justify-between'>
-      <img
-        src={`${isPostLiked(post, user.id) ?
-          '/assets/icons/liked.svg' :
-          '/assets/icons/like.svg'}`
-        }
-        alt="like-image"
-        className='cursor-pointer'
-        width={20}
-        height={20}
-        onClick={() => likePost({ postID: post.$id, userID: user.id })}
-      />
+      <div className='flex gap-2 items-center'>
+        <img
+          src={`${isPostLiked(post, user.id) ?
+            '/assets/icons/liked.svg' :
+            '/assets/icons/like.svg'}`
+          }
+          alt="like-image"
+          className='cursor-pointer'
+          width={20}
+          height={20}
+          onClick={() => likePost({ postID: post.$id, userID: user.id })}
+        />
+        <span>{ post.likes.length }</span>
+      </div>
       {
         isPostSaved ? (
           <img
