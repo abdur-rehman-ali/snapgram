@@ -1,10 +1,10 @@
 import CreatePostForm from "@/components/forms/CreatePostForm"
-import PostFormHeader from "@/components/shared/Headers/PostFormHeader"
+import PageHeader from "@/components/shared/Headers/PageHeader"
 
 const CreatePost = () => {
   return (
     <div className="w-full">
-      <PostFormHeader title="Create new post" />
+      <PageHeader title="Create new post" headerIconUrl="/assets/icons/gallery-add.svg" />
       <CreatePostForm />
     </div>
   )

@@ -1,7 +1,12 @@
+import PageHeader from "@/components/shared/Headers/PageHeader"
+
 const Saved = () => {
   return (
     <div>
-      <h1>This is saved post page</h1>
+      <PageHeader
+        title="Saved Posts"
+        headerIconUrl="/assets/icons/save.svg"
+      />
     </div>
   )
 }
