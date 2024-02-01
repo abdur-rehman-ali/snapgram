@@ -342,3 +342,18 @@ export const unSaveUserPost = async (userID: string, postID: string) => {
     toast.error(error.message);
   }
 }
+
+export const getAllUsers = async () => {
+  try {
+    const users = await databases.listDocuments(
+      appwriteConfig.databaseId,
+      appwriteConfig.usersCollectionId,
+      [
+        Query.orderDesc('$createdAt')
+      ]
+    )
+    return users
+  } catch (error: any) {
+    toast.error(error.message);
+  }
+}
