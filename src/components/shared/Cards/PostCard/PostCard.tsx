@@ -24,7 +24,6 @@ const PostCard = ({ post }: { post: Models.Document }) => {
                 className="w-12 lg:h-12 rounded-full"
               />
             </div>
-
             <div className="flex flex-col">
               <p className="base-medium lg:body-bold text-light-2">
                 {creator.username}
@@ -60,7 +59,6 @@ const PostCard = ({ post }: { post: Models.Document }) => {
             }
           </div>
         </div>
-
         <div >
           <div className="small-medium lg:base-medium py-5">
             <div className="text-light-3 font-bold">{caption}</div>
@@ -74,7 +72,6 @@ const PostCard = ({ post }: { post: Models.Document }) => {
               }
             </ul>
           </div>
-
           <img
             src={imageURL || "/assets/icons/wallpaper.svg"}
             alt="post image"
