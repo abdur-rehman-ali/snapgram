@@ -2,6 +2,7 @@ import UserCard from "@/components/shared/Cards/users/UserCard"
 import PageHeader from "@/components/shared/Headers/PageHeader"
 import { useGetAllUsers } from "@/lib/react-query/queries"
 import { Loader } from "lucide-react"
+import { Link } from "react-router-dom"
 
 const Users = () => {
   const { data: allUsers, isPending } = useGetAllUsers()
@@ -16,7 +17,7 @@ const Users = () => {
       <div className="pt-10 flex flex-wrap gap-4">
         {
           allUsers && allUsers.documents.map((user) => (
-            <UserCard user={ user} />
+            <UserCard user={user} key={user.$id} />
           ))
         }
       </div>
