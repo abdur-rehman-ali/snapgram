@@ -1,8 +1,9 @@
 import { Models } from "appwrite"
+import { Link } from "react-router-dom"
 
 const UserCard = ({ user }: { user: Models.Document }) => {
   return (
-    <div className="user-card w-1/4 max-sm:w-full">
+    <Link to={`/users/${user.$id}`} className="user-card w-1/4 max-sm:w-full">
       <img
         src={user.imageURL ||
           "/assets/images/profile.png"}
@@ -11,7 +12,7 @@ const UserCard = ({ user }: { user: Models.Document }) => {
       />
       <h1>{user.name}</h1>
       <span className="text-[#7878A3]">@{user.username}</span>
-    </div>
+    </Link>
   )
 }
 

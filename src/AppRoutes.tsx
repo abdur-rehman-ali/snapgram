@@ -10,7 +10,8 @@ import {
   Saved,
   CreatePost,
   EditPost,
-  SinglePost
+  SinglePost,
+  UserProfile
 } from './root';
 import { ToastContainer } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
@@ -27,6 +28,7 @@ const AppRoutes = () => {
           <Route index element={<Home />} />
           <Route path='/explore' element={<Explore />} />
           <Route path='/users' element={<Users />} />
+          <Route path='/users/:userID' element={<UserProfile />} />
           <Route path='/saved' element={<Saved />} />
           <Route path='/posts/new' element={<CreatePost />} />
           <Route path='/posts/edit/:postID' element={<EditPost />} />
